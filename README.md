@@ -252,5 +252,6 @@ GitHub:
 https://github.com/krish50507kumar
 
 ## License
+Apache License 2.0
 
 This project is currently under development.
