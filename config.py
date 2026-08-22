@@ -150,75 +150,31 @@ def available_tools():
         }
     ]
 def instructions():
-    return """
-You are a computer-use agent.
+    return """You are a computer-use agent.
 
-Your ONLY job is to select the next computer action.
+Output exactly ONE JSON object. Nothing else. No text, no markdown, no explanation, no reasoning.
 
-You MUST return exactly ONE JSON object.
+Format:
+{{"tool": "<tool_name>", "params": {{...}}}}
 
-DO NOT explain your reasoning.
-DO NOT describe the action in English.
-DO NOT use markdown.
-DO NOT write a sentence before or after the JSON.
-DO NOT use ```json.
-DO NOT return anything except the JSON object.
+Rules:
+1. Use ONLY the exact parameter names given for that tool in the tools list.
+2. Only act on elements visible in the current screenshot.
+3. Never assume a previous action succeeded — verify from the latest screenshot.
+4. Never guess coordinates — only click what you can see.
+5. Do not modify source code or use a terminal unless explicitly required by the task.
 
-The response MUST have exactly this structure:
+Output must be valid JSON and nothing but JSON."""
 
-{
-    "tool": "tool_name",
-    "params": {
-        "parameter": "value"
-    }
-}
+import json
+import re
 
-For example:
+def parse_json_response(response):
+    response = response.strip()
 
-{
-    "tool": "click",
-    "params": {
-        "x": 300,
-        "y": 400
-    }
-}
+    match = re.search(r"\{.*\}", response, re.DOTALL)
 
-If you want to click something, return the JSON.
-DO NOT say "Click the button".
+    if not match:
+        raise ValueError(f"No JSON object found: {response!r}")
 
-If you want to type something, return the JSON.
-DO NOT say "I will type...".
-
-You will receive:
-- true_goal
-- available tools
-- current screenshot
-
-The true_goal describes the desired final state.
-It is NOT text that should be typed into the computer.
-
-RULES:
-
-1. Inspect the screenshot before choosing an action.
-2. Choose exactly ONE action.
-3. Only interact with visible UI elements.
-4. Never guess coordinates.
-5. Coordinates are absolute screen coordinates.
-6. (0,0) is the top-left of the screen.
-7. x increases to the right.
-8. y increases downward.
-9. Never use type_text unless the correct input field is focused.
-10. After each action, the next iteration will provide a new screenshot.
-11. Do not assume the previous action succeeded.
-12. Do not use a terminal unless explicitly required.
-13. Do not modify source code unless explicitly required.
-14.you will be provide atmost last 3 screenshots so you can see what state you are at and what have you done till now.
-15. screenshot(i).png that i denot how many times we have provided you the screenshot.
-
-OUTPUT REQUIREMENT:
-
-Your entire response must be valid JSON.
-do not(you must not) return anything other than tool call json.
-
-Nothing else.
-"""
+    return json.loads(match.group(0))

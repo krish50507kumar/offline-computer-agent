@@ -5,8 +5,7 @@ class LLM:
     def __init__(self, model="qwen3-vl:2b"):
         self.model = model
 
-    def action(self, true_goal, tools, images, instructions):
-
+    def action(self, true_goal, tools, images, instructions, model_w, model_h):
         messages = [
             {
                 "role": "system",
@@ -14,37 +13,18 @@ class LLM:
             },
             {
                 "role": "user",
-                "content": f"""
-True goal:
-{true_goal}
+                "content": f"""Goal: {true_goal}
 
-Available tools:
-{tools}
+    Tools: {tools}
 
-Look at the provided screenshot and determine the next action required
-to achieve the true goal.
+    Image size: {model_w}x{model_h}. (0,0) = top-left. x: 0-{model_w}. y: 0-{model_h}.
 
-Return ONLY valid JSON in exactly this format:
-Inspect the screenshot and choose the NEXT SINGLE ACTION.
+    Example:
+    {{"tool": "click", "params": {{"x": 300, "y": 400}}}}
 
-Return ONLY the JSON tool call.
-
-{{
-    "tool": "tool_name",
-    "params": []
-}}
-
-Do not include explanations, markdown, or any text outside the JSON.
-I only want json nothing else do not even return your reasoning keep it till your self and only give json,
-not my words only json.
-""",
+    Look at the screenshot. Return the next single action as JSON, using this image's coordinate space.""",
                 "images": images
             }
         ]
-
-        response = ollama.chat(
-            model=self.model,
-            messages=messages
-        )
-
+        response = ollama.chat(model=self.model, messages=messages)
         return response["message"]["content"]

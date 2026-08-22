@@ -42,9 +42,22 @@ class Tools:
         sx,sy = gui.size()
         return f"screen: width={sx}, height={sy}"
 
-    def action(self, act):
+    def action(self, act, scale_x=1.0, scale_y=1.0):
         tool = act["tool"]
-        params = act["params"]
+        params = dict(act["params"])
+        if "x" in params:
+            params["x"] = round(params["x"] * scale_x)
+        if "y" in params:
+            params["y"] = round(params["y"] * scale_y)
+        if "start_x" in params:
+            params["start_x"] = round(params["start_x"] * scale_x)
+            params["start_y"] = round(params["start_y"] * scale_y)
+            params["end_x"] = round(params["end_x"] * scale_x)
+            params["end_y"] = round(params["end_y"] * scale_y)
         self.tool_used.append(tool)
-        return self.tools[tool](**params)
+        try:
+            return self.tools[tool](**params)
+        except TypeError as e:
+            print(f"BAD PARAMS for tool '{tool}': {params} — {e}")
+            return None
 
