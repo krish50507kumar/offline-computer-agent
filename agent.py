@@ -9,6 +9,7 @@ from pathlib import Path
 import os
 from config import available_tools,instructions
 
+Path("screenshots").mkdir(exist_ok=True)
 completed = False
 task = """
 Create a file named test.txt inside this exact folder:
