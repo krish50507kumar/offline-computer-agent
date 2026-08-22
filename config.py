@@ -1,177 +1,168 @@
+import json
+import re
 def available_tools():
+    image_coordinate_note = (
+        "Coordinates are absolute positions in the provided screenshot image. "
+        "Use the image dimensions stated in the prompt, not the physical screen resolution."
+    )
+
     return [
         {
             "name": "click",
-            "description": "Click the left mouse button at an absolute screen coordinate.",
+            "description": f"Click the left mouse button. {image_coordinate_note}",
             "parameters": {
-                "x": {
-                    "type": "integer",
-                    "description": "Horizontal screen coordinate."
-                },
-                "y": {
-                    "type": "integer",
-                    "description": "Vertical screen coordinate."
-                }
+                "x": {"type": "integer", "description": "Horizontal image coordinate."},
+                "y": {"type": "integer", "description": "Vertical image coordinate."},
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "double_click",
-            "description": "Double-click the left mouse button at an absolute screen coordinate.",
+            "description": f"Double-click the left mouse button. {image_coordinate_note}",
             "parameters": {
-                "x": {
-                    "type": "integer",
-                    "description": "Horizontal screen coordinate."
-                },
-                "y": {
-                    "type": "integer",
-                    "description": "Vertical screen coordinate."
-                }
+                "x": {"type": "integer", "description": "Horizontal image coordinate."},
+                "y": {"type": "integer", "description": "Vertical image coordinate."},
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "move_mouse",
-            "description": "Move the mouse cursor to an absolute screen coordinate without clicking.",
+            "description": f"Move the mouse cursor without clicking. {image_coordinate_note}",
             "parameters": {
-                "x": {
-                    "type": "integer",
-                    "description": "Horizontal screen coordinate."
-                },
-                "y": {
-                    "type": "integer",
-                    "description": "Vertical screen coordinate."
-                }
+                "x": {"type": "integer", "description": "Horizontal image coordinate."},
+                "y": {"type": "integer", "description": "Vertical image coordinate."},
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "type_text",
-            "description": "Type text using the keyboard into the currently focused application or input field.",
+            "description": "Type text into the currently focused application or input field.",
             "parameters": {
                 "text": {
                     "type": "string",
-                    "description": "The exact text to type."
+                    "description": "The exact text to type.",
                 }
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "press_key",
-            "description": "Press a single keyboard key.",
+            "description": "Press one keyboard key.",
             "parameters": {
                 "key": {
                     "type": "string",
-                    "description": "Key to press, such as 'enter', 'escape', 'tab', 'backspace', 'delete', 'up', 'down', 'left', or 'right'."
+                    "description": (
+                        "A key such as 'enter', 'escape', 'tab', 'backspace', "
+                        "'delete', 'up', 'down', 'left', or 'right'."
+                    ),
                 }
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "hot_key",
-            "description": "Press multiple keyboard keys together, such as Ctrl+L or Ctrl+C.",
+            "description": "Press multiple keyboard keys together.",
             "parameters": {
                 "keys": {
                     "type": "array",
-                    "description": "Keys to press together, for example ['ctrl', 'l']."
+                    "description": "Keys to press together, for example ['ctrl', 'l'].",
                 }
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "scroll",
-            "description": "Scroll vertically. Positive values scroll up and negative values scroll down.",
+            "description": "Scroll vertically. Positive values scroll up; negative values scroll down.",
             "parameters": {
                 "amount": {
                     "type": "integer",
-                    "description": "Number of scroll units. Positive for up, negative for down."
+                    "description": "Number of scroll units.",
                 }
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "drag",
-            "description": "Drag the mouse from one screen coordinate to another.",
+            "description": f"Drag from one point to another. {image_coordinate_note}",
             "parameters": {
-                "start_x": {
-                    "type": "integer",
-                    "description": "Starting horizontal coordinate."
-                },
-                "start_y": {
-                    "type": "integer",
-                    "description": "Starting vertical coordinate."
-                },
-                "end_x": {
-                    "type": "integer",
-                    "description": "Destination horizontal coordinate."
-                },
-                "end_y": {
-                    "type": "integer",
-                    "description": "Destination vertical coordinate."
-                },
+                "start_x": {"type": "integer", "description": "Starting horizontal image coordinate."},
+                "start_y": {"type": "integer", "description": "Starting vertical image coordinate."},
+                "end_x": {"type": "integer", "description": "Ending horizontal image coordinate."},
+                "end_y": {"type": "integer", "description": "Ending vertical image coordinate."},
                 "duration": {
                     "type": "number",
-                    "description": "Duration of the drag in seconds."
+                    "description": "Drag duration in seconds.",
                 },
                 "button": {
                     "type": "string",
-                    "description": "Mouse button to use, normally 'left'."
-                }
+                    "description": "Mouse button to use, normally 'left'.",
+                },
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "wait",
-            "description": "Wait for a specified number of seconds before taking the next action.",
+            "description": "Wait before taking the next action.",
             "parameters": {
                 "seconds": {
                     "type": "number",
-                    "description": "Number of seconds to wait."
+                    "description": "Number of seconds to wait.",
                 }
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "alert",
-            "description": "Display a message to the user using a GUI alert box.",
+            "description": "Display a message to the user in a GUI alert box.",
             "parameters": {
                 "text": {
                     "type": "string",
-                    "description": "Message to display to the user."
+                    "description": "Message to display.",
                 }
             },
-            "returns": "None"
+            "returns": "None",
         },
         {
             "name": "get_screen_info",
-            "description": "Get the current screen resolution.",
+            "description": "Get the physical screen resolution. Do not use it for screenshot coordinates.",
             "parameters": {},
-            "returns": "Screen width and height."
-        }
+            "returns": "Screen width and height.",
+        },
     ]
 def instructions():
     return """You are a computer-use agent.
 
-Output exactly ONE JSON object. Nothing else. No text, no markdown, no explanation, no reasoning.
+Output exactly ONE valid JSON object. Nothing else.
 
 Format:
-{{"tool": "<tool_name>", "params": {{...}}}}
+{"tool": "<tool_name>", "params": {...}}
+
+Coordinates for click, move_mouse, double_click, and drag are coordinates
+in the provided screenshot image—not physical screen coordinates.
+Use only values within the image bounds given in the user message.
 
 Rules:
 1. Use ONLY the exact parameter names given for that tool in the tools list.
-2. Only act on elements visible in the current screenshot.
+2. Only act on elements visible in the latest screenshot.
 3. Never assume a previous action succeeded — verify from the latest screenshot.
 4. Never guess coordinates — only click what you can see.
 5. Do not modify source code or use a terminal unless explicitly required by the task.
+"""
 
-Output must be valid JSON and nothing but JSON."""
 
-import json
-import re
 
 def parse_json_response(response):
     response = response.strip()
 
+    # Remove Markdown code fences
+    response = re.sub(r"^```(?:json)?\s*", "", response)
+    response = re.sub(r"\s*```$", "", response)
+
+    # Remove single backtick wrappers
+    response = re.sub(r"^`(?:json)?\s*", "", response)
+    response = re.sub(r"\s*`$", "", response)
+
+    # Find the JSON object
     match = re.search(r"\{.*\}", response, re.DOTALL)
 
     if not match:

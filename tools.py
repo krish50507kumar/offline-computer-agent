@@ -41,7 +41,10 @@ class Tools:
     def get_screen_info(self):
         sx,sy = gui.size()
         return f"screen: width={sx}, height={sy}"
-
+    def task_complete(self, params=None):
+        return {
+            "status": "completed"
+        }
     def action(self, act, scale_x=1.0, scale_y=1.0):
         tool = act["tool"]
         params = dict(act["params"])

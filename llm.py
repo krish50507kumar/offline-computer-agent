@@ -17,7 +17,13 @@ class LLM:
 
     Tools: {tools}
 
-    Image size: {model_w}x{model_h}. (0,0) = top-left. x: 0-{model_w}. y: 0-{model_h}.
+    Image coordinate system:
+    - Image size: {model_w} × {model_h} pixels
+    - Top-left pixel: (0, 0)
+    - Valid x range: 0 through {model_w - 1}
+    - Valid y range: 0 through {model_h - 1}
+    - Return coordinates in this resized screenshot's coordinate system.
+    - Do NOT use the physical monitor resolution.
 
     Example:
     {{"tool": "click", "params": {{"x": 300, "y": 400}}}}
