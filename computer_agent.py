@@ -52,6 +52,8 @@ class ComputerAgent:
                 logger.info(f"INVALID MODEL COORDINATES: ({x}, {y})")
         if tool_name == "task_complete":
             logger.info("MODEL CLAIMED TASK COMPLETE")
+            self.completed = 1
+            return
         self.tool.action(act, scale_x=scale_x, scale_y=scale_y, pad_top=pad_top)
         time.sleep(self.pause)
 
@@ -59,10 +61,13 @@ class ComputerAgent:
         self.history = self.history[-self.history_limit:]
 
     def start(self):
+        steps = 0
+        max_steps = 50
         logger.info("STARTED")
-        while not self.completed:
+        while not self.completed and steps < max_steps:
             screenshot_path, scale_x, scale_y, model_w, model_h, pad_top = self.observe()
             act = self.reason(screenshot_path, scale_x, scale_y, model_w, model_h)
+            steps+=1
             if act == {}:
                 continue
             self.execute(act, scale_x, scale_y, model_w, model_h, pad_top)

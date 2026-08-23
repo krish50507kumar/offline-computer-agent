@@ -19,7 +19,14 @@ models = {
 }
 model = models[6]
 task = """
-Double-click the Google Chrome icon on the desktop to open it.
+Goal: Open Google Chrome and wait until its window is visible with a page loaded.
+
+Steps:
+1. Find the Chrome icon (on the desktop or taskbar) and double-click it.
+2. Wait a few seconds for the window to appear.
+3. Once you see a Chrome browser window with a webpage or new-tab page visible, the task is complete.
+4. Respond with {"tool": "task_complete", "params": {}} as soon as you see the Chrome window — do not click anything else afterward.
+
 Use the graphical interface only. Do not use a terminal or modify Python source code.
 """
 pause = 2
