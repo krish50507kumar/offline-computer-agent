@@ -27,8 +27,14 @@ The project is divided into several modules:
                               │
                               ▼
                     ┌────────────────────┐
+                    │      Computer      │
+                    │    computer.py     │
+                    └─────────┬──────────┘
+                              │
+                              ▼
+                    ┌────────────────────┐
                     │       Agent        │
-                    │     agent.py       │
+                    │ computer_agent.py  │
                     └─────────┬──────────┘
                               │
                               ▼
@@ -54,7 +60,7 @@ The project is divided into several modules:
 ```text
 AgenticAi/
 │
-├── agent.py
+├── computer_agent.py
 ├── computer.py
 ├── config.py
 ├── llm.py
@@ -67,8 +73,14 @@ AgenticAi/
 │
 └── README.md
 ```
+### `computer.py`
 
-### `agent.py`
+Captures the screenshots of the screen.
+
+Computer handle the screenshot scaling issues and make's the image work for any screen size.
+
+
+### `computer_agent.py`
 
 Contains the core agent logic.
 
