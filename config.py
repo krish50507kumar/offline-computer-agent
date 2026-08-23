@@ -140,6 +140,12 @@ Format:
 Coordinates for click, move_mouse, double_click, and drag are coordinates
 in the provided screenshot image—not physical screen coordinates.
 Use only values within the image bounds given in the user message.
+A green crosshair/arrow marker in the screenshot shows the current mouse.
+cursor position. Use it to judge relative position when adjusting clicks.
+The image may have black letterbox bars at the top and/or bottom — .
+these are padding, not part of the actual screen. Only click within.
+the visible (non-black) portion of the image.
+Click on the center of any button or icon.
 
 Rules:
 1. Use ONLY the exact parameter names given for that tool in the tools list.
@@ -147,6 +153,8 @@ Rules:
 3. Never assume a previous action succeeded — verify from the latest screenshot.
 4. Never guess coordinates — only click what you can see.
 5. Do not modify source code or use a terminal unless explicitly required by the task.
+6. Once the goal has been fully achieved, respond with.
+    '{"tool": "task_complete", "params": {}} to end the task.'
 """
 
 
@@ -154,15 +162,13 @@ Rules:
 def parse_json_response(response):
     response = response.strip()
 
-    # Remove Markdown code fences
     response = re.sub(r"^```(?:json)?\s*", "", response)
     response = re.sub(r"\s*```$", "", response)
 
-    # Remove single backtick wrappers
+
     response = re.sub(r"^`(?:json)?\s*", "", response)
     response = re.sub(r"\s*`$", "", response)
 
-    # Find the JSON object
     match = re.search(r"\{.*\}", response, re.DOTALL)
 
     if not match:

@@ -14,12 +14,13 @@ models = {
     2:"qwen2.5vl:3b",
     3:"gemma3:4b",
     4:"qwen3-vl:4b",
+    5: "moondream",
+    6:"qwen3.5:4b",
 }
-model = models[3]
+model = models[6]
 task = """
-Open Chrome.
-Use the graphical interface to perform the task.
-Do not use a terminal or modify Python source code.
+Double-click the Google Chrome icon on the desktop to open it.
+Use the graphical interface only. Do not use a terminal or modify Python source code.
 """
 pause = 2
 agent = ComputerAgent(model,task,pause)
