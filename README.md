@@ -231,7 +231,6 @@ Use the agent in a controlled environment while developing and testing it.
 ## Roadmap
 
 - [ ] Improve action parsing
-- [ ] Add stronger JSON/action validation
 - [ ] Improve screenshot understanding
 - [ ] Add more computer tools
 - [ ] Add action retry mechanisms
