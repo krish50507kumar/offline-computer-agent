@@ -19,13 +19,17 @@ models = {
 }
 model = models[6]
 task = """
-Goal: Open Google Chrome and wait until its window is visible with a page loaded.
+Goal: Open Google Chrome, then navigate to YouTube (youtube.com).
 
 Steps:
-1. Find the Chrome icon (on the desktop or taskbar) and double-click it.
-2. Wait a few seconds for the window to appear.
-3. Once you see a Chrome browser window with a webpage or new-tab page visible, the task is complete.
-4. Respond with {"tool": "task_complete", "params": {}} as soon as you see the Chrome window — do not click anything else afterward.
+1. Check the screenshot first. If a Chrome window is already open, skip to step 3 — do NOT double-click the Chrome icon again.
+2. If Chrome is not open, find the Chrome icon (on the desktop or taskbar) and double-click it ONCE. Then wait a few seconds for the window to appear.
+3. Use hot_key with keys ["ctrl", "l"] to focus the browser's address bar. Do NOT click on the address bar directly.
+4. Type "youtube.com" using type_text.
+5. Press "enter" to navigate to the page.
+6. Wait a few seconds for the YouTube homepage to load — look for the YouTube logo and video thumbnails.
+7. Once YouTube is visible and loaded, the task is complete.
+8. Respond with {"tool": "task_complete", "params": {}} as soon as you see YouTube loaded — do not click anything else afterward.
 
 Use the graphical interface only. Do not use a terminal or modify Python source code.
 """

@@ -60,12 +60,11 @@ class Tools:
         return {"status": "completed"}
 
     def action(self, act, scale_x=1.0, scale_y=1.0, pad_top=0):
-        tool = act["tool"]
-        params = dict(act["params"])
+        tool = act.get("tool")
+        params = dict(act.get("params") or act.get("parameters") or {})
         if "x" in params:
             params["x"] = round(params["x"] * scale_x)
             params["y"] = round((params["y"] - pad_top) * scale_y)
-            logger.info(f"REAL SCREEN COORDINATES: ({params['x']}, {params['y']})")
         if "start_x" in params:
             params["start_x"] = round(params["start_x"] * scale_x)
             params["start_y"] = round((params["start_y"] - pad_top) * scale_y)
@@ -74,6 +73,6 @@ class Tools:
         self.tool_used.append(tool)
         try:
             return self.tools[tool](**params)
-        except TypeError as e:
+        except (TypeError, KeyError) as e:
             logger.info(f"BAD PARAMS for tool '{tool}': {params} — {e}")
             return None
