@@ -1,12 +1,11 @@
 import json
+import time
 from llm import LLM
 from tools import Tools
 from pathlib import Path
-import pyautogui
-import os
 from config import available_tools,instructions,parse_json_response
 from computer import capture_for_model
-Path("screenshots").mkdir(exist_ok=True)
+Path("../screenshots").mkdir(exist_ok=True)
 completed = False
 task = """
 Open Chrome.
@@ -23,7 +22,7 @@ models = {
 model = models[3]
 vision_model = LLM(model)
 screenshot_dir = Path(
-    r"D:\workspace\Dev tools\PythonProjects\AgenticAi\screenshots"
+    r"/screenshots"
 )
 all_tools = available_tools()
 instruction = instructions()
@@ -34,6 +33,7 @@ while not completed:
     screenshot_path = screenshot_dir / f"screenshot{i}.png"
     # i += 1
     screenshot_path, scale_x, scale_y, model_w, model_h=capture_for_model(screenshot_path)
+    print(scale_x, scale_y, model_w, model_h)
     # pyautogui.screenshot(screenshot_path)
     # model_h = 1080
     # model_w = 1920
@@ -73,5 +73,8 @@ while not completed:
         print("MODEL CLAIMED TASK COMPLETE")
         break
     tool.action(act,scale_x=scale_x, scale_y=scale_y)
+    time.sleep(2)
 
 print("TASK COMPLETED")
+
+

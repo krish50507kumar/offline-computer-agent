@@ -1,5 +1,7 @@
 import pyautogui as gui
 import time
+import logging
+logger = logging.getLogger(__name__)
 class Tools:
     def __init__(self):
         self.tool_used = []
@@ -61,6 +63,6 @@ class Tools:
         try:
             return self.tools[tool](**params)
         except TypeError as e:
-            print(f"BAD PARAMS for tool '{tool}': {params} — {e}")
+            logger.info(f"BAD PARAMS for tool '{tool}': {params} — {e}")
             return None
 
