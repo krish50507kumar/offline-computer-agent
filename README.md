@@ -93,7 +93,7 @@ Handles communication with the language/vision model.
 
 The LLM acts as the reasoning component of the system and determines what the agent should do based on the current task and available information.
 
-default model : **qwen3-vl:2b**
+default model : **qwen3.5:4b**
 
 
 ### `config.py`
